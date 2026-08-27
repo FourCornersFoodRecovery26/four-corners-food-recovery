@@ -1,0 +1,257 @@
+// Four Corners Food Recovery — Supabase configuration
+// Replace the two values below with your Supabase project's public URL and anon key.
+// These are safe to expose in a static web app ONLY when Row Level Security is enabled.
+window.FCR_CONFIG = {
+  url: "YOUR_SUPABASE_PROJECT_URL",
+  anonKey: "YOUR_SUPABASE_ANON_KEY",
+  defaultOrganizationId: "f308345c-a4cb-4375-b825-79c17557aae5"
+};
+<!doctype html>
+<html lang="en">const CACHE="fcr-v3";self.addEventListener("install",e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(["./index.html","./config.js","./manifest.json"]))));self.addEventListener("activate",e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k))))));self.addEventListener("fetch",e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));
+<head>FOUR CORNERS FOOD RECOVERY — PRODUCTION FRONTEND
+
+This version replaces the browser-only demo/localStorage system with Supabase authentication
+and the database/RLS structure already created for the project.
+
+SETUP
+1. Open config.js.
+2. Replace YOUR_SUPABASE_PROJECT_URL with your Supabase Project URL.
+3. Replace YOUR_SUPABASE_ANON_KEY with the project's public anon/publishable key.
+4. Publish the folder to GitHub Pages.
+
+IMPORTANT
+- Never put a Supabase service_role/secret key in this frontend.
+- RLS must remain enabled.
+- The existing organization UUID is already configured:
+  f308345c-a4cb-4375-b825-79c17557aae5
+- The current admin profile must exist in Supabase Auth with a matching public.profiles row.
+
+CURRENT LIVE WORKFLOWS
+- Supabase email/password authentication
+- Profile loading
+- Live dashboard metrics
+- Donation creation
+- Donation listing/filtering
+- Organization-level food requests
+- Volunteer records
+- Organization listing
+- Admin pickup scheduling
+- Live impact metrics
+- Impact report export
+
+SCHEMA NOTES
+The existing donations table uses the column name "doner_id" (spelling preserved intentionally).
+The app uses the existing schema rather than changing it.
+
+BEFORE PILOT LAUNCH
+- Create/verify Supabase Auth email settings.
+- Confirm your admin user/profile.
+- Test each RLS policy using separate test accounts.
+- Add production domain/site URL and redirect URL in Supabase Auth settings.
+- Add volunteer onboarding/training process.
+- Add photo upload, notifications, maps/GPS, and automated donor/driver notifications as the next feature phase.
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#1f6b45">
+<title>Four Corners Food Recovery</title>
+<link rel="manifest" href="./manifest.json">
+<style>
+:root{--dark:#173526;--green:#2f7b50;--green2:#e7f2e8;--card:#fff;--bg:#f5f7f5;--line:#dfe7e1;--muted:#6c7971;--danger:#a9571c;--shadow:0 3px 12px #193b2408}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:#18231d}button,input,select,textarea{font:inherit}button{cursor:pointer}
+.app{min-height:100vh;display:flex}.side{position:fixed;left:0;top:0;bottom:0;width:245px;background:var(--dark);color:#fff;padding:20px 14px;z-index:5}.brand{display:flex;align-items:center;gap:10px;font-weight:800;margin:0 8px 28px}.brandIcon{width:42px;height:42px;background:#65a978;border-radius:13px;display:grid;place-items:center;font-size:22px}.brand small{display:block;color:#b7c9bc;font-weight:500;margin-top:3px}.nav button{display:block;width:100%;border:0;background:none;color:#dce8df;padding:12px;border-radius:10px;text-align:left;margin:3px 0}.nav button:hover,.nav button.active{background:#2a5740;color:#fff}.profile{position:absolute;bottom:18px;left:18px;right:18px;border-top:1px solid #355443;padding-top:14px;font-size:12px;color:#b7c9bc}
+.main{margin-left:245px;width:calc(100% - 245px);padding:24px;max-width:1500px}.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:20px}.top h1{margin:0;font-size:27px}.top p{margin:5px 0 0;color:var(--muted)}.btn{border:0;border-radius:10px;padding:10px 14px;font-weight:800}.primary{background:var(--green);color:#fff}.secondary{background:#fff;color:var(--dark);border:1px solid var(--line)}.danger{background:#fff0e5;color:var(--danger);border:1px solid #f0d4c0}.actions{display:flex;gap:8px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.two{display:grid;grid-template-columns:1.3fr .7fr;gap:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:17px;box-shadow:var(--shadow)}.label{font-size:12px;color:var(--muted)}.metric{font-size:28px;font-weight:900;margin:7px 0}.up{font-size:12px;color:var(--green);font-weight:800}.section{margin-top:16px}.head{display:flex;justify-content:space-between;align-items:center;margin-bottom:11px}.head h2{font-size:18px;margin:0}.row{display:flex;justify-content:space-between;gap:15px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:12px;margin:8px 0;background:#fff}.row strong{display:block}.row small{display:block;color:var(--muted);margin-top:3px}.badge{background:var(--green2);color:var(--green);padding:5px 9px;border-radius:999px;font-size:11px;font-weight:900;white-space:nowrap}.urgent{background:#fff0e5;color:var(--danger)}.view{display:none}.view.active{display:block}.form{display:grid;gap:11px}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}label{font-size:12px;color:var(--muted);font-weight:800}input,select,textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;background:white;margin-top:5px}.tabs{display:flex;gap:7px;overflow:auto;margin-bottom:13px}.tabs button{white-space:nowrap;border:1px solid var(--line);background:#fff;padding:8px 11px;border-radius:9px}.tabs button.on{background:var(--green);color:#fff}.toast{position:fixed;right:20px;bottom:20px;background:var(--dark);color:#fff;padding:12px 15px;border-radius:11px;display:none;z-index:30}.modal{position:fixed;inset:0;background:#0c1e1266;display:none;align-items:center;justify-content:center;padding:20px;z-index:20}.modal.open{display:flex}.modalbox{background:#fff;border-radius:16px;max-width:560px;width:100%;padding:20px;max-height:90vh;overflow:auto}.modalhead{display:flex;justify-content:space-between}.x{border:0;background:none;font-size:22px}.notice{padding:12px;border-radius:11px;background:var(--green2);color:var(--green);font-size:13px;font-weight:700}.error{padding:12px;border-radius:11px;background:#fff0e5;color:#8a3d12;font-size:13px;font-weight:700}.login{min-height:100vh;display:grid;place-items:center;background:linear-gradient(135deg,#173526,#2f7b50);padding:20px}.loginbox{width:min(460px,94vw);background:#fff;border-radius:20px;padding:28px}.loginbox h1{margin:0}.loginbox p{color:var(--muted)}.hidden{display:none!important}.loading{opacity:.65;pointer-events:none}.empty{padding:30px;text-align:center;color:var(--muted)}.map{height:315px;border-radius:14px;background:linear-gradient(135deg,#e5f1e6,#d7e7d8);position:relative;overflow:hidden}.map:before,.map:after{content:"";position:absolute;background:#fff9;width:150%;height:12px;transform:rotate(28deg);top:45%;left:-20%;opacity:.7}.map:after{transform:rotate(-24deg);top:62%}.pin{position:absolute;width:18px;height:18px;border-radius:50% 50% 50% 0;background:var(--green);transform:rotate(-45deg);z-index:2}.pin i{display:block;width:6px;height:6px;background:white;border-radius:50%;margin:6px}.p1{left:22%;top:32%}.p2{left:55%;top:62%}.p3{left:73%;top:28%}.maptag{position:absolute;background:#fff;padding:7px 9px;border-radius:8px;font-size:11px;box-shadow:0 3px 10px #0001;z-index:3}
+@media(max-width:900px){.side{width:68px}.brand span,.brand small,.nav span,.profile{display:none}.brand{margin:0 0 24px}.main{margin-left:68px;width:calc(100% - 68px)}.grid4{grid-template-columns:1fr 1fr}.two{grid-template-columns:1fr}.grid3{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.main{padding:15px}.top{flex-direction:column;align-items:flex-start}.grid4,.grid3,.formgrid{grid-template-columns:1fr}.actions{width:100%}.actions button{flex:1}}
+</style>
+</head>
+<body>
+<div id="login" class="login">{"name":"Four Corners Food Recovery","short_name":"Food Recovery","start_url":"./index.html","display":"standalone","background_color":"#f5f7f5","theme_color":"#1f6b45","icons":[] }
+  <div class="loginbox">
+    <div class="brand" style="margin:0 0 20px;color:#173526"><div class="brandIcon">🥕</div><span>Four Corners Food Recovery<small>Community food rescue</small></span></div>
+    <h1 id="authTitle">Welcome back</h1>
+    <p id="authSubtitle">Sign in to manage food recovery.</p>
+    <div id="authError" class="error hidden"></div>
+    <div class="form">
+      <div><label>Email</label><input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com"></div>
+      <div><label>Password</label><input id="authPassword" type="password" autocomplete="current-password" placeholder="Password"></div>
+      <div id="signupFields" class="hidden">
+        <div class="formgrid">
+          <div><label>Full name</label><input id="authName" placeholder="Your name"></div>
+          <div><label>Role</label><select id="authRole"><option value="volunteer">Volunteer</option><option value="donor">Food Donor</option><option value="partner">Community Partner</option></select></div>
+        </div>
+      </div>
+      <button id="authButton" class="btn primary" onclick="submitAuth()">Sign in</button>
+      <button class="btn secondary" onclick="toggleSignup()" id="toggleAuth">Create an account</button>
+    </div>
+    <p style="font-size:12px;margin-top:18px">Your account and operational data are protected by Supabase authentication and Row Level Security.</p>
+  </div>
+</div>
+
+<div id="app" class="app hidden">
+<aside class="side">
+ <div class="brand"><div class="brandIcon">🥕</div><span>Four Corners<small>Food Recovery</small></span></div>
+ <div class="nav">
+  <button class="active" data-view="dashboard">🏠 <span>Dashboard</span></button>
+  <button data-view="donations">📦 <span>Food Rescue</span></button>
+  <button data-view="requests">🥫 <span>Food Requests</span></button>
+  <button data-view="volunteers">🤝 <span>Volunteers</span></button>
+  <button data-view="partners">🏪 <span>Partners</span></button>
+  <button data-view="routes">🚚 <span>Routes</span></button>
+  <button data-view="impact">📊 <span>Impact</span></button>
+  <button data-view="settings">⚙️ <span>Settings</span></button>
+ </div>
+ <div class="profile" id="profile"></div>
+</aside>
+
+<main class="main">
+<section id="dashboard" class="view active">
+ <div class="top"><div><h1 id="greeting">Community food recovery 👋</h1><p>Your live food recovery command center.</p></div><div class="actions"><button class="btn secondary" onclick="show('routes')">View routes</button><button class="btn primary" onclick="openModal('donationModal')">+ Rescue food</button></div></div>
+ <div class="grid4">
+  <div class="card"><div class="label">Recovered this month</div><div class="metric" id="metricLbs">—</div><div class="up">Live from impact records</div></div>
+  <div class="card"><div class="label">People reached</div><div class="metric" id="metricPeople">—</div><div class="up">Live from impact records</div></div>
+  <div class="card"><div class="label">Active volunteers</div><div class="metric" id="metricVolunteers">—</div><div class="up">Live from volunteer records</div></div>
+  <div class="card"><div class="label">Meals equivalent</div><div class="metric" id="metricMeals">—</div><div class="up">Live from impact records</div></div>
+ </div>
+ <div class="section two">
+  <div class="card"><div class="head"><h2>Today's rescue queue</h2><button class="btn secondary" onclick="show('donations')">See all</button></div><div id="queue"></div></div>
+  <div class="card"><div class="head"><h2>Quick actions</h2></div>
+   <button class="btn secondary" style="width:100%;margin:5px 0" onclick="openModal('donationModal')">📦 Post surplus food</button>
+   <button class="btn secondary" style="width:100%;margin:5px 0" onclick="openModal('requestModal')">🥫 Request food</button>
+   <button class="btn secondary" style="width:100%;margin:5px 0" onclick="show('volunteers')">🤝 Manage volunteers</button>
+   <button class="btn secondary" style="width:100%;margin:5px 0" onclick="show('impact')">📊 View grant metrics</button>
+  </div>
+ </div>
+</section>
+
+<section id="donations" class="view">
+ <div class="top"><div><h1>Food Rescue</h1><p>Post surplus food and coordinate recovery.</p></div><button class="btn primary" onclick="openModal('donationModal')">+ Post donation</button></div>
+ <div class="tabs"><button class="on" onclick="filterDonations('all',this)">All</button><button onclick="filterDonations('urgent',this)">Urgent</button><button onclick="filterDonations('open',this)">Open</button></div>
+ <div class="card"><div id="donationList"></div></div>
+</section>
+
+<section id="requests" class="view">
+ <div class="top"><div><h1>Food Requests</h1><p>Connect recovered food with organizations that need it.</p></div><button class="btn primary" onclick="openModal('requestModal')">+ Request food</button></div>
+ <div class="card"><div id="requestList"></div></div>
+</section>
+
+<section id="volunteers" class="view">
+ <div class="top"><div><h1>Volunteer Hub</h1><p>Manage drivers, food sorting, outreach, and availability.</p></div><button class="btn primary" onclick="openModal('volunteerModal')">+ Add volunteer</button></div>
+ <div class="grid4"><div class="card"><div class="label">Available</div><div class="metric" id="volAvailable">—</div></div><div class="card"><div class="label">Drivers</div><div class="metric" id="volDrivers">—</div></div><div class="card"><div class="label">Volunteers</div><div class="metric" id="volTotal">—</div></div><div class="card"><div class="label">Hours recorded</div><div class="metric" id="volHours">—</div></div></div>
+ <div class="section card"><div class="head"><h2>Volunteer roster</h2><button class="btn secondary" onclick="refresh()">Refresh</button></div><div id="volList"></div></div>
+</section>
+
+<section id="partners" class="view">
+ <div class="top"><div><h1>Community Partners</h1><p>Donors, pantries, shelters, schools, nonprofits, and agencies.</p></div><button class="btn primary" onclick="openModal('partnerModal')">+ Add partner</button></div>
+ <div class="grid3"><div class="card"><div class="label">Active organizations</div><div class="metric" id="partnerTotal">—</div></div><div class="card"><div class="label">Food donors</div><div class="metric" id="partnerDonors">—</div></div><div class="card"><div class="label">Recipient agencies</div><div class="metric" id="partnerRecipients">—</div></div></div>
+ <div class="section card"><div id="partnerList"></div></div>
+</section>
+
+<section id="routes" class="view">
+ <div class="top"><div><h1>Pickups & Routes</h1><p>Review scheduled pickups and assign drivers.</p></div><button class="btn primary" onclick="openModal('pickupModal')">+ Schedule pickup</button></div>
+ <div class="two"><div class="card"><div class="map"><div class="pin p1"><i></i></div><div class="pin p2"><i></i></div><div class="pin p3"><i></i></div><div class="maptag" style="left:15%;top:18%">Donor</div><div class="maptag" style="left:50%;top:70%">Recipient</div><div class="maptag" style="left:68%;top:10%">Community</div></div></div>
+ <div class="card"><div class="head"><h2>Pickup queue</h2><button class="btn secondary" onclick="refresh()">Refresh</button></div><div id="routeList"></div></div></div>
+</section>
+
+<section id="impact" class="view">
+ <div class="top"><div><h1>Impact & Grants</h1><p>Live metrics for funders, partners, and your board.</p></div><button class="btn primary" onclick="downloadReport()">Export report</button></div>
+ <div class="grid4"><div class="card"><div class="label">Food recovered</div><div class="metric" id="impactLbs">—</div></div><div class="card"><div class="label">Meal equivalents</div><div class="metric" id="impactMeals">—</div></div><div class="card"><div class="label">Volunteer hours</div><div class="metric" id="impactHours">—</div></div><div class="card"><div class="label">People served</div><div class="metric" id="impactPeople">—</div></div></div>
+ <div class="section grid3"><div class="card"><h2>Monthly recovery</h2><div class="metric" id="impactGoal">—</div><div class="notice">Based on live impact records.</div></div><div class="card"><h2>Community reach</h2><div class="metric" id="impactReach">—</div><div class="notice">People served recorded by pickups.</div></div><div class="card"><h2>Volunteer contribution</h2><div class="metric" id="impactVolunteer">—</div><div class="notice">Hours recorded in impact records.</div></div></div>
+</section>
+
+<section id="settings" class="view">
+ <div class="top"><div><h1>Settings</h1><p>Account and connection status.</p></div></div>
+ <div class="card"><h2>Account</h2><p id="settingsUser">—</p><button class="btn secondary" onclick="signOut()">Log out</button></div>
+ <div class="section card"><h2>Production status</h2><div class="notice">Supabase authentication, database access, and Row Level Security are enabled. This app no longer uses demo localStorage data.</div></div>
+</section>
+</main></div>
+
+<!-- Donation modal -->
+<div class="modal" id="donationModal"><div class="modalbox"><div class="modalhead"><h2>Post surplus food</h2><button class="x" onclick="closeModal('donationModal')">×</button></div>
+<div class="form" style="margin-top:15px">
+<div><label>Estimated pounds *</label><input id="dLbs" type="number" min="1" placeholder="100"></div>
+<div><label>Food type *</label><input id="dFood" placeholder="Produce, bakery, prepared meals"></div>
+<div><label>Description</label><textarea id="dDesc" rows="3" placeholder="What is available?"></textarea></div>
+<div><label>Pickup address / area</label><input id="dAddress" placeholder="Cortez, CO"></div>
+<div class="formgrid"><div><label>Status</label><select id="dStatus"><option value="open">Open</option><option value="urgent">Urgent</option></select></div><div><label>Priority</label><select id="dPriority"><option value="normal">Normal</option><option value="urgent">Urgent</option></select></div></div>
+<button class="btn primary" onclick="saveDonation()">Post donation</button></div></div></div>
+
+<!-- Request modal -->
+<div class="modal" id="requestModal"><div class="modalbox"><div class="modalhead"><h2>Request food</h2><button class="x" onclick="closeModal('requestModal')">×</button></div>
+<div class="form" style="margin-top:15px">
+<div><label>Food type *</label><input id="rFood" placeholder="Produce, bread, meals"></div>
+<div><label>Quantity needed *</label><input id="rQty" type="number" min="1" placeholder="100"></div>
+<div><label>Needed by</label><input id="rDate" type="date"></div>
+<div><label>Notes</label><textarea id="rNotes" rows="3"></textarea></div>
+<button class="btn primary" onclick="saveRequest()">Submit request</button></div></div></div>
+
+<!-- Volunteer modal -->
+<div class="modal" id="volunteerModal"><div class="modalbox"><div class="modalhead"><h2>Volunteer profile</h2><button class="x" onclick="closeModal('volunteerModal')">×</button></div>
+<div class="form" style="margin-top:15px">
+<div><label>Profile UUID *</label><input id="vProfile" placeholder="Supabase user UUID"></div>
+<div class="formgrid"><div><label>Driver?</label><select id="vDriver"><option value="false">No</option><option value="true">Yes</option></select></div><div><label>Available?</label><select id="vAvailable"><option value="true">Yes</option><option value="false">No</option></select></div></div>
+<div><label>Vehicle type</label><input id="vVehicle" placeholder="Truck, SUV, car, none"></div>
+<div><label>Service area</label><input id="vArea" placeholder="Cortez / Montezuma County"></div>
+<button class="btn primary" onclick="saveVolunteer()">Save volunteer</button></div></div></div>
+
+<!-- Partner modal -->
+<div class="modal" id="partnerModal"><div class="modalbox"><div class="modalhead"><h2>Add organization</h2><button class="x" onclick="closeModal('partnerModal')">×</button></div>
+<div class="form" style="margin-top:15px">
+<div><label>Organization name *</label><input id="pName"></div>
+<div><label>Type</label><select id="pType"><option value="Donor">Food Donor</option><option value="Recipient">Recipient Agency</option><option value="Partner">Community Partner</option><option value="Nonprofit">Nonprofit</option></select></div>
+<div class="formgrid"><div><label>Phone</label><input id="pPhone"></div><div><label>Email</label><input id="pEmail" type="email"></div></div>
+<div><label>Address</label><input id="pAddress"></div>
+<button class="btn primary" onclick="savePartner()">Save organization</button></div></div></div>
+
+<!-- Pickup modal -->
+<div class="modal" id="pickupModal"><div class="modalbox"><div class="modalhead"><h2>Schedule pickup</h2><button class="x" onclick="closeModal('pickupModal')">×</button></div>
+<div class="form" style="margin-top:15px">
+<div><label>Donation UUID *</label><input id="pkDonation" placeholder="Donation ID"></div>
+<div><label>Volunteer profile UUID *</label><input id="pkVolunteer" placeholder="Driver profile ID"></div>
+<div><label>Schedule time</label><input id="pkTime" type="datetime-local"></div>
+<div><label>Status</label><select id="pkStatus"><option value="scheduled">Scheduled</option><option value="assigned">Assigned</option><option value="pending">Pending</option></select></div>
+<div><label>Notes</label><textarea id="pkNotes" rows="3"></textarea></div>
+<button class="btn primary" onclick="savePickup()">Schedule pickup</button></div></div></div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./config.js"></script>
+<script>
+const cfg=window.FCR_CONFIG||{};
+let supabaseClient=null,currentUser=null,currentProfile=null,currentFilter="all";
+const $=id=>document.getElementById(id);
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function moneyDate(){return new Date().toLocaleDateString()}
+function toast(m){const t=$("toast");t.textContent=m;t.style.display="block";clearTimeout(window.tt);window.tt=setTimeout(()=>t.style.display="none",2800)}
+function err(m){$("authError").textContent=m;$("authError").classList.remove("hidden")}
+function clearErr(){$("authError").classList.add("hidden")}
+function show(id){document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));$(id).classList.add("active");document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.view===id));scrollTo(0,0)}
+document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>show(b.dataset.view));
+function toggleSignup(){const on=$("signupFields").classList.toggle("hidden");$("authTitle").textContent=on?"Create your account":"Welcome back";$("authSubtitle").textContent=on?"Join the Four Corners recovery network.":"Sign in to manage food recovery.";$("authButton").textContent=on?"Create account":"Sign in";$("toggleAuth").textContent=on?"Back to sign in":"Create an account";clearErr()}
+async function submitAuth(){clearErr();if(!supabaseClient){err("Supabase is not configured. Add your project URL and anon key to config.js.");return}const email=$("authEmail").value.trim(),password=$("authPassword").value;if(!email||!password){err("Enter your email and password.");return}const signup=!$("signupFields").classList.contains("hidden");$("authButton").disabled=true;try{if(signup){const {data,error}=await supabaseClient.auth.signUp({email,password});if(error)throw error;if(!data.user)throw new Error("Account could not be created.");const role=$("authRole").value,name=$("authName").value.trim()||"New user";const {error:pe}=await supabaseClient.from("profiles").insert({id:data.user.id,full_name:name,role,organization_id:cfg.defaultOrganizationId||null});if(pe)throw pe;toast("Account created. Check your email if confirmation is required.");if(data.session)await bootUser(data.user)}else{const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});if(error)throw error;await bootUser(data.user)}}catch(e){err(e.message||"Authentication failed.")}finally{$("authButton").disabled=false}}
+async function bootUser(user){currentUser=user;const {data,error}=await supabaseClient.from("profiles").select("id,full_name,role,organization_id").eq("id",user.id).maybeSingle();if(error)throw error;currentProfile=data; $("login").classList.add("hidden");$("app").classList.remove("hidden");$("profile").textContent=`${data?.full_name||user.email} • ${data?.role||"user"}`;$("settingsUser").textContent=`${data?.full_name||user.email} (${data?.role||"user"}) • ${user.email}`;$("greeting").textContent=`Good ${new Date().getHours()<12?"morning":new Date().getHours()<18?"afternoon":"evening"} ${data?.full_name?data.full_name.split(" ")[0]:""} 👋`;await refresh()}
+async function signOut(){await supabaseClient.auth.signOut();location.reload()}
+function openModal(id){$(id).classList.add("open")}function closeModal(id){$(id).classList.remove("open")}
+function badge(t){const s=String(t||"");return `<span class="badge ${/urgent|needs/i.test(s)?"urgent":""}">${esc(s||"—")}</span>`}
+function isAdmin(){return currentProfile?.role==="admin"}
+async function refresh(){try{await Promise.all([loadDashboard(),loadDonations(),loadRequests(),loadVolunteers(),loadPartners(),loadPickups(),loadImpact()])}catch(e){toast(e.message||"Could not refresh data.")}}
+async function loadDashboard(){const [imp,vol,don]=await Promise.all([supabaseClient.from("impact_records").select("lbs_recovered,meals_equivalent,people_served,volunteer_hours,recorded_at"),supabaseClient.from("volunteers").select("id,available"),supabaseClient.from("donations").select("id,estimated_lbs,status,priority,food_type,description,pickup_address,created_at").order("created_at",{ascending:false}).limit(6)]);if(imp.error)throw imp.error;if(vol.error)throw vol.error;if(don.error)throw don.error;const now=new Date(),month=now.getMonth(),year=now.getFullYear();const rows=(imp.data||[]).filter(x=>{const d=new Date(x.recorded_at||now);return d.getMonth()===month&&d.getFullYear()===year});const sum=k=>rows.reduce((a,x)=>a+Number(x[k]||0),0);$("metricLbs").textContent=Math.round(sum("lbs_recovered")).toLocaleString()+" lbs";$("metricMeals").textContent=Math.round(sum("meals_equivalent")).toLocaleString();$("metricPeople").textContent=Math.round(sum("people_served")).toLocaleString();$("metricVolunteers").textContent=(vol.data||[]).length.toLocaleString();$("queue").innerHTML=(don.data||[]).map(d=>`<div class="row"><div><strong>${esc(d.food_type||"Food donation")}</strong><small>${Number(d.estimated_lbs||0).toLocaleString()} lbs • ${esc(d.pickup_address||"Address not listed")}</small></div>${badge(d.status||"open")}</div>`).join("")||'<div class="empty">No donations yet.</div>'}
+async function loadDonations(){let q=supabaseClient.from("donations").select("id,doner_id,food_type,description,estimated_lbs,pickup_address,status,priority,created_at").order("created_at",{ascending:false});if(currentFilter==="urgent")q=q.eq("priority","urgent");if(currentFilter==="open")q=q.in("status",["open","pending","needs_driver"]);const {data,error}=await q;if(error)throw error;$("donationList").innerHTML=(data||[]).map(d=>`<div class="row"><div><strong>${esc(d.food_type||"Food donation")}</strong><small>${Number(d.estimated_lbs||0).toLocaleString()} lbs • ${esc(d.pickup_address||"No address")} • ${esc(d.description||"")}</small></div><div>${badge(d.priority||"normal")} ${badge(d.status||"open")}</div></div>`).join("")||'<div class="empty">No donations match this filter.</div>'}
+function filterDonations(f,b){currentFilter=f;document.querySelectorAll(".tabs button").forEach(x=>x.classList.remove("on"));b.classList.add("on");loadDonations()}
+async function saveDonation(){const lbs=Number($("dLbs").value),food=$("dFood").value.trim(),desc=$("dDesc").value.trim(),address=$("dAddress").value.trim(),status=$("dStatus").value,priority=$("dPriority").value;if(!lbs||!food){toast("Food type and pounds are required.");return}const {error}=await supabaseClient.from("donations").insert({doner_id:currentUser.id,food_type:food,description:desc,estimated_lbs:lbs,pickup_address:address,status,priority});if(error){toast(error.message);return}closeModal("donationModal");["dLbs","dFood","dDesc","dAddress"].forEach(x=>$(x).value="");await refresh();toast("Donation posted successfully.")}
+async function loadRequests(){const {data,error}=await supabaseClient.from("food_request").select("id,organization_id,food_type,quantity_needed,needed_by,status,notes,created_at").order("created_at",{ascending:false});if(error)throw error;$("requestList").innerHTML=(data||[]).map(r=>`<div class="row"><div><strong>${esc(r.food_type||"Food request")}</strong><small>${Number(r.quantity_needed||0).toLocaleString()} units • Needed by ${esc(r.needed_by||"—")} • ${esc(r.notes||"")}</small></div>${badge(r.status||"open")}</div>`).join("")||'<div class="empty">No food requests yet.</div>'}
+async function saveRequest(){if(!currentProfile?.organization_id){toast("Your profile is not linked to an organization yet.");return}const food=$("rFood").value.trim(),qty=Number($("rQty").value),date=$("rDate").value||null,notes=$("rNotes").value.trim();if(!food||!qty){toast("Food type and quantity are required.");return}const {error}=await supabaseClient.from("food_request").insert({organization_id:currentProfile.organization_id,food_type:food,quantity_needed:qty,needed_by:date,notes,status:"open"});if(error){toast(error.message);return}closeModal("requestModal");await loadRequests();toast("Food request submitted.")}
+async function loadVolunteers(){const {data,error}=await supabaseClient.from("volunteers").select("id,profile_id,is_driver,available,vehicle_type,service_area,created_at").order("created_at",{ascending:false});if(error)throw error;$("volTotal").textContent=(data||[]).length;$("volAvailable").textContent=(data||[]).filter(x=>x.available).length;$("volDrivers").textContent=(data||[]).filter(x=>x.is_driver).length;const hours=await supabaseClient.from("impact_records").select("volunteer_hours");$("volHours").textContent=Math.round((hours.data||[]).reduce((a,x)=>a+Number(x.volunteer_hours||0),0));$("volList").innerHTML=(data||[]).map(v=>`<div class="row"><div><strong>${esc(v.profile_id)}</strong><small>${v.is_driver?"Driver":"Volunteer"} • ${v.available?"Available":"Unavailable"} • ${esc(v.vehicle_type||"No vehicle")} • ${esc(v.service_area||"")}</small></div>${badge(v.available?"Available":"Unavailable")}</div>`).join("")||'<div class="empty">No volunteers registered yet.</div>';$("metricVolunteers").textContent=(data||[]).length}
+async function saveVolunteer(){const pid=$("vProfile").value.trim()||currentUser.id;const payload={profile_id:pid,is_driver:$("vDriver").value==="true",available:$("vAvailable").value==="true",vehicle_type:$("vVehicle").value.trim(),service_area:$("vArea").value.trim()};const {error}=await supabaseClient.from("volunteers").insert(payload);if(error){toast(error.message);return}closeModal("volunteerModal");await loadVolunteers();toast("Volunteer record saved.")}
+async function loadPartners(){const {data,error}=await supabaseClient.from("organizations").select("id,name,type,address,phone,email,active").eq("active",true).order("name");if(error)throw error;const rows=data||[];$("partnerTotal").textContent=rows.length;$("partnerDonors").textContent=rows.filter(x=>/donor/i.test(x.type||"")).length;$("partnerRecipients").textContent=rows.filter(x=>/recipient|pantry|shelter/i.test(x.type||"")).length;$("partnerList").innerHTML=rows.map(p=>`<div class="row"><div><strong>${esc(p.name)}</strong><small>${esc(p.type||"Partner")} • ${esc(p.address||"")}</small></div>${badge("Active")}</div>`).join("")||'<div class="empty">No active organizations.</div>'}
+async function savePartner(){if(!isAdmin()){toast("Only an administrator can add organizations.");return}const payload={name:$("pName").value.trim(),type:$("pType").value,address:$("pAddress").value.trim(),phone:$("pPhone").value.trim(),email:$("pEmail").value.trim(),active:true};if(!payload.name){toast("Organization name is required.");return}const {error}=await supabaseClient.from("organizations").insert(payload);if(error){toast(error.message);return}closeModal("partnerModal");await loadPartners();toast("Organization added.")}
+async function loadPickups(){const {data,error}=await supabaseClient.from("pickups").select("id,donation_id,volunteer_id,schedule_time,status,actual_lbs,pickup_confirmed_at,notes").order("schedule_time",{ascending:true});if(error)throw error;$("routeList").innerHTML=(data||[]).map(p=>`<div class="row"><div><strong>Pickup #${esc(String(p.id).slice(0,8))}</strong><small>${p.schedule_time?new Date(p.schedule_time).toLocaleString():"Time not set"} • Driver ${esc(p.volunteer_id||"—")} • ${p.actual_lbs?Number(p.actual_lbs).toLocaleString()+" lbs":"lbs pending"}</small></div>${badge(p.status||"scheduled")}</div>`).join("")||'<div class="empty">No pickups scheduled.</div>'}
+async function savePickup(){if(!isAdmin()){toast("Only an administrator can schedule pickups.");return}const payload={donation_id:$("pkDonation").value.trim()||null,volunteer_id:$("pkVolunteer").value.trim()||null,schedule_time:$("pkTime").value?new Date($("pkTime").value).toISOString():null,status:$("pkStatus").value,notes:$("pkNotes").value.trim()};const {error}=await supabaseClient.from("pickups").insert(payload);if(error){toast(error.message);return}closeModal("pickupModal");await loadPickups();toast("Pickup scheduled.")}
+async function loadImpact(){const {data,error}=await supabaseClient.from("impact_records").select("lbs_recovered,meals_equivalent,people_served,volunteer_hours,recorded_at");if(error)throw error;const rows=data||[],sum=k=>rows.reduce((a,x)=>a+Number(x[k]||0),0),lbs=sum("lbs_recovered"),meals=sum("meals_equivalent"),people=sum("people_served"),hours=sum("volunteer_hours");$("impactLbs").textContent=Math.round(lbs).toLocaleString()+" lbs";$("impactMeals").textContent=Math.round(meals).toLocaleString();$("impactPeople").textContent=Math.round(people).toLocaleString();$("impactHours").textContent=Math.round(hours).toLocaleString();$("impactGoal").textContent=Math.round(lbs).toLocaleString()+" lbs";$("impactReach").textContent=Math.round(people).toLocaleString();$("impactVolunteer").textContent=Math.round(hours).toLocaleString()+" hrs"}
+async function downloadReport(){const {data,error}=await supabaseClient.from("impact_records").select("lbs_recovered,meals_equivalent,people_served,volunteer_hours,recorded_at");if(error){toast(error.message);return}const s=(k)=>(data||[]).reduce((a,x)=>a+Number(x[k]||0),0);const text=`FOUR CORNERS FOOD RECOVERY\nIMPACT REPORT\nGenerated ${new Date().toLocaleString()}\n\nFood recovered: ${Math.round(s("lbs_recovered")).toLocaleString()} lbs\nMeal equivalents: ${Math.round(s("meals_equivalent")).toLocaleString()}\nPeople served: ${Math.round(s("people_served")).toLocaleString()}\nVolunteer hours: ${Math.round(s("volunteer_hours")).toLocaleString()}\n`;const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([text],{type:"text/plain"}));a.download="four-corners-impact-report.txt";a.click();URL.revokeObjectURL(a.href);toast("Impact report exported.")}
+async function init(){if(!window.supabase||!cfg.url||!cfg.anonKey||cfg.url.includes("YOUR_")){$("authSubtitle").textContent="Supabase connection needs to be configured in config.js.";return}supabaseClient=window.supabase.createClient(cfg.url,cfg.anonKey);const {data}=await supabaseClient.auth.getSession();if(data.session){try{await bootUser(data.session.user)}catch(e){console.error(e);toast("Signed in, but profile could not be loaded.")}}supabaseClient.auth.onAuthStateChange((event,session)=>{if(event==="SIGNED_OUT")location.reload()})}
+init();
+</script>
+</body>
+</html>
