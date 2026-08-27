@@ -1,24 +1,42 @@
-FOUR CORNERS FOOD RECOVERY — VERSION 2
+FOUR CORNERS FOOD RECOVERY — PRODUCTION FRONTEND
 
-FREE BUILD:
-1. Open index.html for the working prototype.
-2. The app uses browser localStorage, so accounts/data are demo-only and stored on the device.
-3. To publish it free, use a static host such as GitHub Pages or Cloudflare Pages.
-4. For a real production app, add a free-tier backend such as Supabase and replace demo login/localStorage with secure authentication and a database.
+This version replaces the browser-only demo/localStorage system with Supabase authentication
+and the database/RLS structure already created for the project.
 
-V2 FEATURES:
-- Demo login and roles
-- Persistent browser data
-- Donation posting
-- Donation filtering
-- Claiming donations
-- Volunteer roster
-- Partner roster
-- Route queue
-- Impact dashboard
-- Exportable impact report
-- Responsive/mobile layout
-- PWA manifest/service-worker foundation
+SETUP
+1. Open config.js.
+2. Replace YOUR_SUPABASE_PROJECT_URL with your Supabase Project URL.
+3. Replace YOUR_SUPABASE_ANON_KEY with the project's public anon/publishable key.
+4. Publish the folder to GitHub Pages.
 
-IMPORTANT:
-Do not put real client names, addresses, phone numbers, medical information, or other sensitive information into this prototype. The production version needs proper security, permissions, backups, and privacy controls.
+IMPORTANT
+- Never put a Supabase service_role/secret key in this frontend.
+- RLS must remain enabled.
+- The existing organization UUID is already configured:
+  f308345c-a4cb-4375-b825-79c17557aae5
+- The current admin profile must exist in Supabase Auth with a matching public.profiles row.
+
+CURRENT LIVE WORKFLOWS
+- Supabase email/password authentication
+- Profile loading
+- Live dashboard metrics
+- Donation creation
+- Donation listing/filtering
+- Organization-level food requests
+- Volunteer records
+- Organization listing
+- Admin pickup scheduling
+- Live impact metrics
+- Impact report export
+
+SCHEMA NOTES
+The existing donations table uses the column name "doner_id" (spelling preserved intentionally).
+The app uses the existing schema rather than changing it.
+
+BEFORE PILOT LAUNCH
+- Create/verify Supabase Auth email settings.
+- Confirm your admin user/profile.
+- Test each RLS policy using separate test accounts.
+- Add production domain/site URL and redirect URL in Supabase Auth settings.
+- Add volunteer onboarding/training process.
+- Add photo upload, notifications, maps/GPS, and automated donor/driver notifications as the next feature phase.
